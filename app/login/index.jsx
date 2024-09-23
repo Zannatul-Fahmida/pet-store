@@ -1,39 +1,222 @@
-import { View, Text, Image, Pressable } from 'react-native'
-import React from 'react'
-import Colors from '../../constants/Colors.ts'
+import { View, Text, Pressable, Platform, TextInput } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import Colors from "../../constants/Colors.ts";
+import * as WebBrowser from "expo-web-browser";
+import { useClerk, useSignIn, useOAuth } from "@clerk/clerk-expo";
+import * as Linking from "expo-linking";
+import { TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
+
+export const useWarmUpBrowser = () => {
+  useEffect(() => {
+    if (Platform.OS !== "web") {
+      void WebBrowser.warmUpAsync();
+      return () => {
+        void WebBrowser.coolDownAsync();
+      };
+    }
+  }, []);
+};
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
+  const { signIn, setActive, isLoaded } = useSignIn();
+
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+
+  useWarmUpBrowser();
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+  const onSignInPress = useCallback(async () => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: emailAddress,
+        password,
+      });
+
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.replace("/(tabs)");
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2));
+      }
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2));
+    }
+  }, [isLoaded, emailAddress, password]);
+
+  const onPress = useCallback(async () => {
+    try {
+      const { createdSessionId } = await startOAuthFlow({
+        redirectUrl: Linking.createURL("/(tabs)", { scheme: "myapp" }),
+      });
+
+      if (createdSessionId) {
+      }
+    } catch (err) {
+      console.error("OAuth error", err);
+    }
+  }, []);
+
   return (
-    <View style={{height: '100%', backgroundColor: Colors.White}}>
-      <Image source={require('../../assets/images/3811024.jpg')} style={{width: '100%', height:340}} />
-      <View style={{
-        padding: 20,
-        display: 'flex',
-        alignItems: 'center',
-      }}>
-      <Text style={{fontFamily: 'sofadi', fontSize: 30, textAlign: 'center'}}>Ready to make a new friend?</Text>
-      <Text style={{fontFamily: 'inter', fontSize: 18, textAlign: 'center', color: Colors.GRAY}}>Let's adopt the pet which you like and make their life happy again</Text>
-      <Pressable style={{
-        padding: 14,
-        marginTop: 80,
-        backgroundColor: Colors.PRIMARY,
-        width: '100%',
-        borderRadius: 14,
-      }}>
-      <Text style={{
-        fontFamily: 'inter',
-        fontWeight: 600,
-        fontSize: 20,
-        textAlign: 'center',
-      }}>Get Started</Text>
-      </Pressable>
+    <View style={{ flex: 1, backgroundColor: Colors.WHITE, padding: 20 }}>
+      {/* Header */}
+      <View
+        style={{
+          paddingVertical: 40,
+          backgroundColor: Colors.PRIMARY,
+          borderBottomLeftRadius: 50,
+          borderBottomRightRadius: 50,
+          paddingHorizontal: 20,
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Inter",
+            fontSize: 36,
+            color: Colors.WHITE,
+            fontWeight: "bold",
+          }}
+        >
+          Welcome Back,
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Inter",
+            fontSize: 24,
+            color: Colors.WHITE,
+          }}
+        >
+          Log In to Continue
+        </Text>
+      </View>
+
+      {/* Form */}
+      <View
+        style={{
+          backgroundColor: Colors.WHITE,
+          borderRadius: 20,
+          padding: 20,
+          shadowColor: "#000",
+          shadowOpacity: 0.1,
+          shadowOffset: { width: 0, height: 5 },
+          shadowRadius: 10,
+          elevation: 8,
+        }}
+      >
+        {/* Email Input */}
+        <TextInput
+          autoCapitalize="none"
+          value={emailAddress}
+          placeholder="Enter your email"
+          placeholderTextColor="#888"
+          onChangeText={setEmailAddress}
+          style={{
+            backgroundColor: Colors.ASH,
+            padding: 15,
+            borderRadius: 10,
+            fontSize: 16,
+            marginBottom: 20,
+          }}
+        />
+
+        {/* Password Input */}
+        <TextInput
+          value={password}
+          placeholder="Enter your password"
+          placeholderTextColor="#888"
+          secureTextEntry={true}
+          onChangeText={setPassword}
+          style={{
+            backgroundColor: Colors.ASH,
+            padding: 15,
+            borderRadius: 10,
+            fontSize: 16,
+            marginBottom: 20,
+          }}
+        />
+
+        {/* Sign In Button */}
+        <TouchableOpacity
+          onPress={onSignInPress}
+          style={{
+            backgroundColor: Colors.PRIMARY,
+            paddingVertical: 15,
+            borderRadius: 10,
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={{
+              color: Colors.WHITE,
+              fontSize: 18,
+              fontWeight: "600",
+            }}
+          >
+            Sign In
+          </Text>
+        </TouchableOpacity>
+
+        {/* OR Separator */}
+        <View style={{ alignItems: "center", marginVertical: 10 }}>
+          <Text style={{ fontSize: 16, color: "#888" }}>OR</Text>
+        </View>
+
+        {/* Google Sign In Button */}
+        <Pressable
+          onPress={onPress}
+          style={{
+            padding: 14,
+            backgroundColor: Colors.ASH,
+            borderRadius: 10,
+            alignItems: "center",
+            marginBottom: 20,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: Colors.PRIMARY,
+              fontFamily: "Inter",
+              fontWeight: "600",
+              fontSize: 18,
+              marginLeft: 8,
+            }}
+          >
+            Sign in with Google
+          </Text>
+        </Pressable>
+
+        {/* Sign Up Link */}
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <Text style={{ color: "#888", fontSize: 16 }}>
+            Don't have an account?
+          </Text>
+          <Link href="/signup" asChild>
+            <TouchableOpacity>
+              <Text
+                style={{
+                  color: Colors.PRIMARY,
+                  fontSize: 16,
+                  marginLeft: 5,
+                  fontWeight: "600",
+                }}
+              >
+                Sign up
+              </Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
     </View>
-  )
+  );
 }
-
-// <View style={{backgroundColor: Colors.PRIMARY}}>
-//       <Text style={{fontFamily: 'Inter', fontSize: 32}}>Welcome Back,</Text>
-//       <Text style={{fontFamily: 'Inter', fontSize: 32, fontWeight: 700}}>Log In!</Text>
-//       </View>
-//       <View></View>
