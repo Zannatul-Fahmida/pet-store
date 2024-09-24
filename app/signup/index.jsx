@@ -2,12 +2,13 @@ import { Text, TextInput, TouchableOpacity, View, Pressable, ScrollView } from '
 import React, { useState, useCallback } from 'react';
 import { useSignUp, useOAuth } from '@clerk/clerk-expo';
 import Colors from '../../constants/Colors.ts';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
+  const router = useRouter();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -44,7 +45,7 @@ export default function SignUpScreen() {
       const signUpAttempt = await signUp.attemptEmailAddressVerification({ code });
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId });
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home'); // Use router to navigate
       } else {
         console.error(JSON.stringify(signUpAttempt, null, 2));
       }
@@ -60,7 +61,7 @@ export default function SignUpScreen() {
       });
 
       if (createdSessionId) {
-        // Handle successful Google OAuth
+        router.replace('/(tabs)/home');
       }
     } catch (err) {
       console.error('OAuth error', err);

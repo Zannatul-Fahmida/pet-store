@@ -5,7 +5,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useClerk, useSignIn, useOAuth } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
 import { TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {
@@ -22,6 +22,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
+  const router = useRouter();
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +36,12 @@ export default function LoginScreen() {
     }
 
     try {
+      const activeSession = signIn.createdSessionId;
+
+      if (activeSession) {
+        await signIn.signOut();
+      }
+
       const signInAttempt = await signIn.create({
         identifier: emailAddress,
         password,
@@ -42,22 +49,30 @@ export default function LoginScreen() {
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(tabs)");
+        router.replace("/(tabs)/home"); 
       } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
+        console.error("Sign-in attempt not complete:", JSON.stringify(signInAttempt, null, 2));
       }
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+      console.error("Error during sign-in process:", err);
+      if (err.response) {
+        console.error("Error response:", err.response);
+        console.error("Error status:", err.response.status);
+        console.error("Error data:", JSON.stringify(err.response.data, null, 2));
+      } else {
+        console.error("Error details:", JSON.stringify(err, null, 2));
+      }
     }
   }, [isLoaded, emailAddress, password]);
-
+  
   const onPress = useCallback(async () => {
     try {
       const { createdSessionId } = await startOAuthFlow({
-        redirectUrl: Linking.createURL("/(tabs)", { scheme: "myapp" }),
+        redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "myapp" }),
       });
 
       if (createdSessionId) {
+        router.replace('/(tabs)/home');
       }
     } catch (err) {
       console.error("OAuth error", err);
