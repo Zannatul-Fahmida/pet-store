@@ -2,6 +2,8 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { SignOutButton } from '@clerk/clerk-expo/web'
 import Header from '../../components/Home/Header'
+import Slider from '../../components/Home/Slider'
+import PetListByCategory from '../../components/Home/PetListByCategory'
 
 export default function Home() {
   return (
@@ -9,8 +11,9 @@ export default function Home() {
     {/* Header */}
     <Header />
     {/* Slider */}
-    {/* Category */}
-    {/* List of pets */}
+    <Slider />
+    {/* Pet List + Category */}
+    <PetListByCategory />
     {/* Add new pet options */}
     <SignOutButton>
     <button>Sign out</button>
