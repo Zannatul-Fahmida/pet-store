@@ -5,7 +5,7 @@ import { db } from "../../config/FirebaseConfig";
 import Colors from "../../constants/Colors.ts";
 import { TouchableOpacity } from "react-native";
 
-export default function Category() {
+export default function Category({category}) {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Dogs");
 
@@ -38,7 +38,10 @@ export default function Category() {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            onPress={() => setSelectedCategory(item.name)}
+            onPress={() => {
+              setSelectedCategory(item.name);
+              category(item.name);
+            }}
             style={{
               flex: 1,
             }}
