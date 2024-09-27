@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import MarkFav from "../MarkFav";
 
-export default function PetListItem({ pet, onUpdate }) {
+export default function PetListItem({ pet }) {
   const router = useRouter();
   return (
     <TouchableOpacity
@@ -23,7 +23,7 @@ export default function PetListItem({ pet, onUpdate }) {
       }}
     >
       <View style={{position: 'absolute', zIndex: 10, right: 10, top: 10}}>
-        <MarkFav pet={pet} onUpdate={onUpdate} color={'white'} />
+        <MarkFav pet={pet} color={'white'} />
       </View>
       <Image
         source={{ uri: pet?.imgUrl }}

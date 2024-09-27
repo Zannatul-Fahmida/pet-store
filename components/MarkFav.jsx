@@ -1,17 +1,15 @@
-import { View, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Shared from "../Shared/Shared";
 import { useUser } from "@clerk/clerk-expo";
 
-export default function MarkFav({ pet, onUpdate, color='black' }) {
+export default function MarkFav({ pet, color='black' }) {
   const { user } = useUser();
   const [favList, setFavList] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      GetFav();
-    }
+    if (user) GetFav();
   }, [user]);
 
   const GetFav = async () => {
@@ -20,30 +18,28 @@ export default function MarkFav({ pet, onUpdate, color='black' }) {
   };
 
   const AddToFav = async () => {
-    const newFavList = [...favList, pet.id];
-    await Shared.UpdateFav(user, newFavList);
-    setFavList(newFavList); 
-    if (onUpdate) onUpdate(newFavList); 
+    const favResult = [...favList, pet.id]; // Add pet ID
+    await Shared.UpdateFav(user, favResult);
+    GetFav(); // Refresh the favorite list immediately
   };
 
   const removeFromFav = async () => {
-    const newFavList = favList.filter((item) => item !== pet.id);
-    await Shared.UpdateFav(user, newFavList);
-    setFavList(newFavList);
-    if (onUpdate) onUpdate(newFavList);
+    const favResult = favList.filter((item) => item !== pet.id); // Remove pet ID
+    await Shared.UpdateFav(user, favResult);
+    GetFav(); // Refresh the favorite list immediately
   };
-
-  const isFav = favList.includes(pet.id);
 
   return (
     <View>
-      <Pressable onPress={isFav ? removeFromFav : AddToFav}>
-        <Ionicons 
-          name={isFav ? "heart" : "heart-outline"} 
-          size={30} 
-          color={isFav ? "red" : color} 
-        />
-      </Pressable>
+      {favList.includes(pet.id) ? (
+        <Pressable onPress={removeFromFav}>
+          <Ionicons name="heart" size={30} color="red" />
+        </Pressable>
+      ) : (
+        <Pressable onPress={AddToFav}>
+          <Ionicons name="heart-outline" size={30} color={color} />
+        </Pressable>
+      )}
     </View>
   );
 }
