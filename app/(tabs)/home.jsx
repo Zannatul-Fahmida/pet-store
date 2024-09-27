@@ -36,9 +36,9 @@ export default function Home() {
         <MaterialIcons name="pets" size={24} color={Colors.PINK} />
         <Text style={{fontFamily: 'Inter', color: Colors.PINK, fontSize: 18}}>Add New Pet</Text>
       </TouchableOpacity>
-      <SignOutButton>
+      {/*<SignOutButton>
         <button>Sign out</button>
-      </SignOutButton>
+      </SignOutButton>*/}
     </ScrollView>
   );
 }

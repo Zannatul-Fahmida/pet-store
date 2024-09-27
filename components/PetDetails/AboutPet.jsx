@@ -8,7 +8,7 @@ export default function AboutPet({ pet }) {
     <View style={{ padding: 20 }}>
       <Text
         style={{
-          fontFamily: "Sofadi",
+          fontFamily: "sofadi",
           fontSize: 20,
           fontWeight: 700,
           color: Colors.PINK,
@@ -18,15 +18,15 @@ export default function AboutPet({ pet }) {
       </Text>
       <Text
         numberOfLines={readMore ? 3 : 20}
-        style={{ fontFamily: "Inter", fontSize: 14, color: Colors.GRAY }}
+        style={{ fontFamily: "inter", fontSize: 14, color: Colors.GRAY }}
       >
         {pet?.about}
       </Text>
       {readMore ? (
-        <Pressable onPress={()=>setReadMore(false)}>
+        <Pressable onPress={() => setReadMore(false)}>
           <Text
             style={{
-              fontFamily: "Inter",
+              fontFamily: "inter",
               fontWeight: 700,
               fontSize: 14,
               color: Colors.SECONDARY,
@@ -35,11 +35,11 @@ export default function AboutPet({ pet }) {
             Read More
           </Text>
         </Pressable>
-      ):(
-        <Pressable onPress={()=>setReadMore(true)}>
+      ) : (
+        <Pressable onPress={() => setReadMore(true)}>
           <Text
             style={{
-              fontFamily: "Inter",
+              fontFamily: "inter",
               fontWeight: 700,
               fontSize: 14,
               color: Colors.SECONDARY,

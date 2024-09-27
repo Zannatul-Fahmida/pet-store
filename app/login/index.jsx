@@ -49,22 +49,28 @@ export default function LoginScreen() {
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(tabs)/home"); 
+        router.replace("/(tabs)/home");
       } else {
-        console.error("Sign-in attempt not complete:", JSON.stringify(signInAttempt, null, 2));
+        console.error(
+          "Sign-in attempt not complete:",
+          JSON.stringify(signInAttempt, null, 2)
+        );
       }
     } catch (err) {
       console.error("Error during sign-in process:", err);
       if (err.response) {
         console.error("Error response:", err.response);
         console.error("Error status:", err.response.status);
-        console.error("Error data:", JSON.stringify(err.response.data, null, 2));
+        console.error(
+          "Error data:",
+          JSON.stringify(err.response.data, null, 2)
+        );
       } else {
         console.error("Error details:", JSON.stringify(err, null, 2));
       }
     }
   }, [isLoaded, emailAddress, password]);
-  
+
   const onPress = useCallback(async () => {
     try {
       const { createdSessionId } = await startOAuthFlow({
@@ -72,7 +78,7 @@ export default function LoginScreen() {
       });
 
       if (createdSessionId) {
-        router.replace('/(tabs)/home');
+        router.replace("/(tabs)/home");
       }
     } catch (err) {
       console.error("OAuth error", err);
@@ -94,7 +100,7 @@ export default function LoginScreen() {
       >
         <Text
           style={{
-            fontFamily: "Inter",
+            fontFamily: "inter",
             fontSize: 36,
             color: Colors.WHITE,
             fontWeight: "bold",
@@ -104,7 +110,7 @@ export default function LoginScreen() {
         </Text>
         <Text
           style={{
-            fontFamily: "Inter",
+            fontFamily: "inter",
             fontSize: 24,
             color: Colors.WHITE,
           }}
@@ -201,7 +207,7 @@ export default function LoginScreen() {
           <Text
             style={{
               color: Colors.PRIMARY,
-              fontFamily: "Inter",
+              fontFamily: "inter",
               fontWeight: "600",
               fontSize: 18,
               marginLeft: 8,

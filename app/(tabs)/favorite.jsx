@@ -1,10 +1,89 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
+import Colors from "../../constants/Colors";
+import Shared from "../../Shared/Shared";
+import { useUser } from "@clerk/clerk-expo";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../config/FirebaseConfig";
+import PetListItem from "../../components/Home/PetListItem";
 
 export default function Favorite() {
+  const { user } = useUser();
+  const [favIds, setFavIds] = useState([]);
+  const [favPetList, setFavPetList] = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      GetFavPetIds();
+    }
+  }, [user]);
+
+  const GetFavPetIds = async () => {
+    setLoader(true);
+    const result = await Shared.GetFavList(user);
+    setFavIds(result?.favorites || []);
+    setLoader(false);
+  };
+
+  useEffect(() => {
+    if (favIds.length > 0) {
+      GetFavPetList();
+    } else {
+      setFavPetList([]); 
+    }
+  }, [favIds]);
+
+  const GetFavPetList = async () => {
+    setLoader(true);
+    const q = query(collection(db, "Pets"), where("id", "in", favIds));
+    const querySnapshot = await getDocs(q);
+    const pets = [];
+    querySnapshot.forEach((doc) => {
+      pets.push({ ...doc.data(), id: doc.id });
+    });
+    setFavPetList(pets);
+    setLoader(false);
+  };
+
+  const handleUpdateFavorites = async () => {
+    await GetFavPetIds(); 
+  };
+
+  if (loader) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={Colors.PINK} />
+      </View>
+    );
+  }
+
   return (
-    <View>
-      <Text>Favorite</Text>
+    <View style={{ padding: 20, marginTop: 20 }}>
+      <Text
+        style={{
+          fontFamily: "sofadi",
+          fontSize: 27,
+          color: Colors.PINK,
+          fontWeight: "bold",
+        }}
+      >
+        Favorites
+      </Text>
+      {favPetList.length === 0 ? (
+        <Text>No favorite pets yet!</Text>
+      ) : (
+        <FlatList
+          data={favPetList}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <View key={item.id}>
+              <PetListItem pet={item} onUpdate={handleUpdateFavorites} />
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </View>
-  )
+  );
 }

@@ -5,7 +5,7 @@ import { db } from "../../config/FirebaseConfig";
 import Colors from "../../constants/Colors.ts";
 import { TouchableOpacity } from "react-native";
 
-export default function Category({category}) {
+export default function Category({ category }) {
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Dogs");
 
@@ -25,7 +25,7 @@ export default function Category({category}) {
     <View style={{ marginTop: 20 }}>
       <Text
         style={{
-          fontFamily: "Sofadi",
+          fontFamily: "sofadi",
           fontSize: 24,
           fontWeight: 700,
         }}
@@ -59,7 +59,7 @@ export default function Category({category}) {
             </View>
             <Text
               style={{
-                fontFamily: "Sofadi",
+                fontFamily: "sofadi",
                 textAlign: "center",
               }}
             >
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     borderWidth: 1,
-    borderRadius: "50%",
+    borderRadius: 99,
     borderColor: Colors.PINK,
     margin: 5,
   },

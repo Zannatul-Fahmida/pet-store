@@ -6,19 +6,21 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 export default function OwnerInfo({ pet }) {
   return (
     <View style={styles.container}>
-      <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 20,
-      }}>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 20,
+        }}
+      >
         <Image
           source={{ uri: pet?.userImg }}
-          style={{ width: 50, height: 50, borderRadius: "50%" }}
+          style={{ width: 50, height: 50, borderRadius: 99 }}
         />
         <View>
           <Text
             style={{
-              fontFamily: "Inter",
+              fontFamily: "inter",
               fontSize: 17,
             }}
           >
@@ -26,7 +28,7 @@ export default function OwnerInfo({ pet }) {
           </Text>
           <Text
             style={{
-              fontFamily: "Inter",
+              fontFamily: "inter",
               color: Colors.GRAY,
             }}
           >
@@ -51,6 +53,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     borderColor: Colors.PRIMARY,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
 });

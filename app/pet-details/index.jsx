@@ -20,7 +20,7 @@ export default function PetDetails() {
   }, []);
   return (
     <View style={{ backgroundColor: Colors.WHITE }}>
-      <ScrollView>
+    <ScrollView>
         {/* pet info */}
         <PetInfo pet={pet} />
         {/* pet sub info */}
@@ -30,7 +30,7 @@ export default function PetDetails() {
         {/* owner details */}
         <OwnerInfo pet={pet} />
         <View style={{ height: 70 }}></View>
-      </ScrollView>
+        </ScrollView>
       {/* adopt me button */}
       <View style={styles.bottomContainer}>
       <TouchableOpacity style={styles.adoptBtn}>

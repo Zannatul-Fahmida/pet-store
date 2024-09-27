@@ -3,15 +3,18 @@ import React from "react";
 import Colors from "../../constants/Colors";
 import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
+import MarkFav from "../MarkFav";
 
-export default function PetListItem({ pet }) {
-    const router = useRouter();
+export default function PetListItem({ pet, onUpdate }) {
+  const router = useRouter();
   return (
     <TouchableOpacity
-    onPress={()=>router.push({
-        pathname: '/pet-details',
-        params: pet
-    })}
+      onPress={() =>
+        router.push({
+          pathname: "/pet-details",
+          params: pet,
+        })
+      }
       style={{
         padding: 10,
         marginRight: 15,
@@ -19,17 +22,20 @@ export default function PetListItem({ pet }) {
         borderRadius: 10,
       }}
     >
+      <View style={{position: 'absolute', zIndex: 10, right: 10, top: 10}}>
+        <MarkFav pet={pet} onUpdate={onUpdate} color={'white'} />
+      </View>
       <Image
         source={{ uri: pet?.imgUrl }}
         style={{
-          width: '100%',
+          width: "100%",
           height: 135,
           objectFit: "cover",
         }}
       />
       <Text
         style={{
-          fontFamily: "Inter",
+          fontFamily: "inter",
           fontSize: 18,
         }}
       >
@@ -46,14 +52,14 @@ export default function PetListItem({ pet }) {
         <Text
           style={{
             color: Colors.GRAY,
-            fontFamily: "Inter",
+            fontFamily: "inter",
           }}
         >
           {pet?.breed}
         </Text>
         <Text
           style={{
-            fontFamily: "Inter",
+            fontFamily: "inter",
             color: Colors.PINK,
             backgroundColor: Colors.LIGHT_PINK,
             paddingHorizontal: 7,
