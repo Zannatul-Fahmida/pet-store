@@ -7,6 +7,7 @@ import PetListByCategory from "../../components/Home/PetListByCategory";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 import { TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
 
 export default function Home() {
   return (
@@ -18,12 +19,14 @@ export default function Home() {
       {/* Pet List + Category */}
       <PetListByCategory />
       {/* Add new pet options */}
-      <TouchableOpacity
+      <Link
+      href={'/add-new-pet'}
         style={{
           display: "flex",
           flexDirection: "row",
           gap: 10,
           alignItems: "center",
+          textAlign: "center",
           padding:20,
           marginVertical: 20,
           backgroundColor: Colors.LIGHT_PINK,
@@ -35,7 +38,7 @@ export default function Home() {
       >
         <MaterialIcons name="pets" size={24} color={Colors.PINK} />
         <Text style={{fontFamily: 'Inter', color: Colors.PINK, fontSize: 18}}>Add New Pet</Text>
-      </TouchableOpacity>
+      </Link>
       {/*<SignOutButton>
         <button>Sign out</button>
       </SignOutButton>*/}

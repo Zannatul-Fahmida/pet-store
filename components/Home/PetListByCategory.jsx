@@ -13,6 +13,7 @@ export default function PetListByCategory() {
   useEffect(() => {
     getPetList("Dogs");
   }, []);
+
   //   get pet list on category selection
   const getPetList = async (category) => {
     setLoader(true);
@@ -38,7 +39,11 @@ export default function PetListByCategory() {
         horizontal={true}
         refreshing={loader}
         onRefresh={() => getPetList("Dogs")}
-        renderItem={({ item, index }) => <PetListItem pet={item} />}
+        renderItem={({ item }) => (
+          <View style={{ width: 200 }}>
+            <PetListItem pet={item} />
+          </View>
+        )}
       />
     </View>
   );

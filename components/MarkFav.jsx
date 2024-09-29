@@ -18,15 +18,15 @@ export default function MarkFav({ pet, color='black' }) {
   };
 
   const AddToFav = async () => {
-    const favResult = [...favList, pet.id]; // Add pet ID
+    const favResult = [...favList, pet.id]; 
     await Shared.UpdateFav(user, favResult);
-    GetFav(); // Refresh the favorite list immediately
+    GetFav(); 
   };
 
   const removeFromFav = async () => {
-    const favResult = favList.filter((item) => item !== pet.id); // Remove pet ID
+    const favResult = favList.filter((item) => item !== pet.id); 
     await Shared.UpdateFav(user, favResult);
-    GetFav(); // Refresh the favorite list immediately
+    GetFav(); 
   };
 
   return (
