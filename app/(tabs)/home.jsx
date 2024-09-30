@@ -1,13 +1,11 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Button } from "react-native";
 import React from "react";
-import { SignOutButton } from "@clerk/clerk-expo/web";
 import Header from "../../components/Home/Header";
 import Slider from "../../components/Home/Slider";
 import PetListByCategory from "../../components/Home/PetListByCategory";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
-import { TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export default function Home() {
   return (
@@ -20,28 +18,27 @@ export default function Home() {
       <PetListByCategory />
       {/* Add new pet options */}
       <Link
-      href={'/add-new-pet'}
+        href={"/add-new-pet"}
         style={{
           display: "flex",
           flexDirection: "row",
           gap: 10,
           alignItems: "center",
           textAlign: "center",
-          padding:20,
+          padding: 20,
           marginVertical: 20,
           backgroundColor: Colors.LIGHT_PINK,
           borderWidth: 1,
           borderColor: Colors.PRIMARY,
-          borderStyle: 'dotted',
-          justifyContent: 'center',
+          borderStyle: "dotted",
+          justifyContent: "center",
         }}
       >
         <MaterialIcons name="pets" size={24} color={Colors.PINK} />
-        <Text style={{fontFamily: 'Inter', color: Colors.PINK, fontSize: 18}}>Add New Pet</Text>
+        <Text style={{ fontFamily: "Inter", color: Colors.PINK, fontSize: 18 }}>
+          Add New Pet
+        </Text>
       </Link>
-      {/*<SignOutButton>
-        <button>Sign out</button>
-      </SignOutButton>*/}
     </ScrollView>
   );
 }
