@@ -5,10 +5,12 @@ import { Link } from "expo-router";
 
 export default function GetStartedScreen() {
   return (
-    <View style={{ height: "100%", backgroundColor: Colors.WHITE }}>
+    <View style={{ height: "100%", backgroundColor: Colors.WHITE, paddingTop: 40 }}>
       <Image
         source={require("../../assets/images/3811024.jpg")}
         style={{ width: "100%", height: 340 }}
+        alt="animal image"
+        resizeMode="contain"
       />
       <View
         style={{

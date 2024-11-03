@@ -79,6 +79,7 @@ export default function SignUpScreen() {
           borderBottomRightRadius: 50,
           paddingHorizontal: 20,
           alignItems: 'center',
+          marginVertical: 40,
         }}
       >
         <Text style={{ fontFamily: 'Inter', fontSize: 36, color: Colors.WHITE, fontWeight: 'bold', textAlign: 'center' }}>
@@ -100,7 +101,8 @@ export default function SignUpScreen() {
             shadowOpacity: 0.1,
             shadowOffset: { width: 0, height: 5 },
             shadowRadius: 10,
-            elevation: 8,
+            elevation: 2,
+            margin: 10,
           }}
         >
           <TextInput

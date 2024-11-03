@@ -96,6 +96,7 @@ export default function LoginScreen() {
           borderBottomRightRadius: 50,
           paddingHorizontal: 20,
           alignItems: "center",
+          marginVertical: 40,
         }}
       >
         <Text
