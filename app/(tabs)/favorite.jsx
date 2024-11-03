@@ -61,12 +61,12 @@ export default function Favorite() {
         numColumns={2}
         onRefresh={GetFavPetIds}
         refreshing={loader}
-        renderItem={({ item, index }) => (
-          <View key={index}>
+        keyExtractor={(item) => item.id} 
+        renderItem={({ item }) => (
+          <View style={{ width: '50%'  }}>
             <PetListItem pet={item} />
           </View>
         )}
-        keyExtractor={(item) => item.id} 
       />
     </View>
   );

@@ -4,7 +4,7 @@ import { useNavigation } from "expo-router";
 import { query } from "firebase/database";
 import { db } from "../../config/FirebaseConfig";
 import { useUser } from "@clerk/clerk-expo";
-import { collection, deleteDoc, getDocs, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, where } from "firebase/firestore";
 import PetListItem from "../../components/Home/PetListItem";
 
 export default function UserPost() {
@@ -20,7 +20,6 @@ export default function UserPost() {
     user && getUserPost();
   }, [user]);
 
-  // used to get user post
   const getUserPost = async () => {
     setLoader(true);
     setUserPostList([]);
@@ -31,30 +30,30 @@ export default function UserPost() {
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
-      setUserPostList((prev) => [...prev, doc.data()]);
+      setUserPostList((prev) => [...prev, { id: doc.id, ...doc.data() }]);
     });
     setLoader(false);
   };
 
-  const onDeletePost = (docId)=>{
-    Alert.alert('Do you want to delete?', 'If you delete this post it cannot be recover anymore',
+  const onDeletePost = (docId) => {
+    Alert.alert("Do you want to delete?", "If you delete this post it cannot be recovered anymore", [
       {
-        text: 'Cancel',
-        onPress: ()=>console.log('Cancel click'),
-        style: 'cancel',
+        text: "Cancel",
+        onPress: () => console.log("Cancel click"),
+        style: "cancel",
       },
       {
-        text: 'Delete',
-        onPress: ()=>deletePost(docId),
-        style: 'delete',
-      }
-    )
-  }
+        text: "Delete",
+        onPress: () => deletePost(docId),
+        style: "destructive",
+      },
+    ]);
+  };
 
-  const deletePost = async(docId) =>{
-    await deleteDoc(doc(db, 'Pets', docId));
+  const deletePost = async (docId) => {
+    await deleteDoc(doc(db, "Pets", docId));
     getUserPost();
-  }
+  };
 
   return (
     <View style={{ padding: 20 }}>
@@ -63,13 +62,14 @@ export default function UserPost() {
         numColumns={2}
         refreshing={loader}
         onRefresh={getUserPost}
-        renderItem={({ item, index }) => (
-          <View key={index}>
-            <PetListItem pet={item} />
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={{width: '50%'}}>
+          <PetListItem pet={item} isUserPost={true} onDeletePost={onDeletePost} />
           </View>
         )}
       />
-      {userPostList?.length==0 && <Text>No Post Found</Text>}
+      {userPostList?.length === 0 && <Text>No Post Found</Text>}
     </View>
   );
 }
