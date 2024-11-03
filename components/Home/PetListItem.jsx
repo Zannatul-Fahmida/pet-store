@@ -74,6 +74,7 @@ export default function PetListItem({ pet, isUserPost, onDeletePost }) {
           style={{
             color: Colors.GRAY,
             fontFamily: "inter",
+            fontSize: 12,
           }}
         >
           {pet?.breed}
@@ -84,7 +85,7 @@ export default function PetListItem({ pet, isUserPost, onDeletePost }) {
             color: Colors.PINK,
             backgroundColor: Colors.LIGHT_PINK,
             paddingHorizontal: 7,
-            fontSize: 11,
+            fontSize: 10,
             borderRadius: 10,
           }}
         >
