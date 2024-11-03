@@ -4,16 +4,65 @@ import Colors from "../../constants/Colors.ts";
 import MarkFav from "../MarkFav.jsx";
 
 export default function PetInfo({ pet }) {
+  const label = pet?.label; 
+  let labelStyle = {};
+
+  if (label === "Featured") {
+    labelStyle = {
+      backgroundColor: "#FFD700", 
+      color: Colors.WHITE,
+    };
+  } else if (label === "Urgent") {
+    labelStyle = {
+      backgroundColor: "#FF4500", 
+      color: Colors.WHITE,
+    };
+  } else if (label === "Top") {
+    labelStyle = {
+      backgroundColor: "#1E90FF", 
+      color: Colors.WHITE,
+    };
+  } else {
+    labelStyle={
+      color: 'transparent',
+    }
+  }
+
   return (
     <View>
       <Image
-        source={{ uri: pet.imgUrl }}
+        source={{ uri: pet?.imgUrl }}
         style={{
           width: "100%",
           height: 400,
-          objectFit: "cover",
+          position: "relative",
+          resizeMode: "cover", 
         }}
       />
+      {label && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 110,
+            right: 10,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: labelStyle.backgroundColor,
+            zIndex: 1, 
+          }}
+        >
+          <Text
+            style={{
+              color: labelStyle.color,
+              fontFamily: "inter",
+              fontWeight: "bold",
+              fontSize: 14,
+            }}
+          >
+            {label}
+          </Text>
+        </View>
+      )}
       <View
         style={{
           padding: 20,

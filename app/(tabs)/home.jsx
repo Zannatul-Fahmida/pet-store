@@ -9,6 +9,7 @@ import PetListItem from "../../components/Home/PetListItem";
 import { MaterialIcons, EvilIcons } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 import { Link } from "expo-router";
+import UrgentPosts from "../../components/Home/UrgentPosts";
 
 export default function Home() {
   const [searchText, setSearchText] = useState("");
@@ -48,7 +49,7 @@ export default function Home() {
     <ScrollView style={{ padding: 20, marginTop: 20 }}>
       {/* Header */}
       <Header />
-      
+
       {/* Slider */}
       <Slider />
 
@@ -60,13 +61,18 @@ export default function Home() {
           gap: 5,
           borderWidth: 1,
           borderColor: Colors.PINK,
-          borderStyle: 'dotted',
+          borderStyle: "dotted",
           paddingHorizontal: 10,
           height: 40,
           marginVertical: 20,
         }}
       >
-        <EvilIcons name="search" size={24} color={Colors.GRAY} style={{paddingBottom: 3}} />
+        <EvilIcons
+          name="search"
+          size={24}
+          color={Colors.GRAY}
+          style={{ paddingBottom: 3 }}
+        />
         <TextInput
           placeholder="Search for pets by name..."
           value={searchText}
@@ -95,7 +101,7 @@ export default function Home() {
       {/* Pet List + Category */}
       <PetListByCategory />
 
-      {/* Add new pet options */}
+      {/* Add new pet options 
       <Link
         href={"/add-new-pet"}
         style={{
@@ -117,7 +123,12 @@ export default function Home() {
         <Text style={{ fontFamily: "Inter", color: Colors.PINK, fontSize: 18 }}>
           Add New Pet
         </Text>
-      </Link>
+      </Link> 
+      */}
+
+      {/*Urgent Adoption posts*/}
+      <UrgentPosts />
+
     </ScrollView>
   );
 }

@@ -25,14 +25,16 @@ export default function AddNewPet() {
   const [formData, setFormData] = useState({
     category: "Dogs",
     sex: "Male",
+    label: "None",
   });
+  const [label, setLabel] = useState("None");
   const [gender, setGender] = useState();
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [image, setImage] = useState();
   const [loader, setLoader] = useState(false);
   const { user } = useUser();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     navigation.setOptions({
@@ -73,7 +75,7 @@ export default function AddNewPet() {
   };
 
   const onSubmit = () => {
-    if (Object.keys(formData).length != 8) {
+    if (Object.keys(formData).length != 9) {
       ToastAndroid.show("Enter all details", ToastAndroid.SHORT);
       return;
     }
@@ -101,21 +103,17 @@ export default function AddNewPet() {
 
   const saveFormData = async (imgUrl) => {
     const docId = Date.now().toString();
-    await setDoc(
-      doc(db, "Pets", docId),
-      {
-        ...formData,
-        imgUrl: imgUrl,
-        userName: user?.fullName,
-        email: user?.primaryEmailAddress?.emailAddress,
-        userImg: user?.imageUrl,
-        id: docId,
-      }
-    );
+    await setDoc(doc(db, "Pets", docId), {
+      ...formData,
+      imgUrl: imgUrl,
+      userName: user?.fullName,
+      email: user?.primaryEmailAddress?.emailAddress,
+      userImg: user?.imageUrl,
+      id: docId,
+    });
     setLoader(false);
-    router.replace('/(tabs)/home');
+    router.replace("/(tabs)/home");
   };
-  
 
   return (
     <ScrollView
@@ -186,6 +184,23 @@ export default function AddNewPet() {
       </View>
 
       <View style={styles.inputContainer}>
+        <Text style={styles.label}>Label (Featured/Urgent/Top) *</Text>
+        <Picker
+          selectedValue={label}
+          style={styles.input}
+          onValueChange={(itemValue) => {
+            setLabel(itemValue);
+            handleInputChange("label", itemValue);
+          }}
+        >
+          <Picker.Item label="None" value="None" />
+          <Picker.Item label="Featured" value="Featured" />
+          <Picker.Item label="Urgent" value="Urgent" />
+          <Picker.Item label="Top" value="Top" />
+        </Picker>
+      </View>
+
+      <View style={styles.inputContainer}>
         <Text style={styles.label}>Breed *</Text>
         <TextInput
           placeholder="Breed"
@@ -251,7 +266,7 @@ export default function AddNewPet() {
         onPress={onSubmit}
       >
         {loader ? (
-          <ActivityIndicator size={'large'} />
+          <ActivityIndicator size={"large"} />
         ) : (
           <Text
             style={{
